@@ -2,7 +2,9 @@
 
 ## Category List
 If parentId is null, default is zero
+
 Request: http://host:portNumber/category/:parentId
+
 Response:
 ```json
 {"categories":
@@ -20,7 +22,9 @@ Response:
 ```
 
 ## Product List 
+
 Request: http://host:portNumber/product/:categoryId
+
 Response:
 ```json
 {
