@@ -1,0 +1,25 @@
+{
+  "name": "restoran",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eroberer/Restoraunt-Application-WebServices-NodeJS.git"
+  },
+  "author": "eroberer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eroberer/Restoraunt-Application-WebServices-NodeJS/issues"
+  },
+  "homepage": "https://github.com/eroberer/Restoraunt-Application-WebServices-NodeJS#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "mysql": "^2.13.0"
+  } 
+}
