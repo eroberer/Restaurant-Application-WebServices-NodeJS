@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-
+const imageHost = 'http://fatihsimsek.me/restoran/Public/Uploads/';
 const connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -7,4 +7,7 @@ const connection = mysql.createConnection({
   database : 'restoran'
 });
 
-module.exports = connection; 
+module.exports = {
+  connection : connection,
+  imageHost : imageHost
+}; 

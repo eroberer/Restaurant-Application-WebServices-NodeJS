@@ -1,4 +1,5 @@
-const connection = require('./config/connection');
+const config = require('./config/connection');
+const connection = config.connection;
 
 async function getProducts(categoryId) {
     let results = [];
@@ -32,7 +33,7 @@ function productQuery(categoryId) {
  
 function imageQuery(productId) {
     return new Promise((resolve, reject) => {
-        connection.query('SELECT image FROM productimages WHERE productID = ?', [productId], (err, images, fields) => {
+        connection.query('SELECT CONCAT(?, image) as image FROM productimages WHERE productID = ?', [config.imageHost + "Products/", productId], (err, images, fields) => {
             if (err) return reject(err)
             resolve({ images, fields })
         })
