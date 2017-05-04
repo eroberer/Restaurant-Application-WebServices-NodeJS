@@ -3,9 +3,9 @@
 ## Category List
 If parentId is null, default is zero
 
-Request: http://host:portNumber/category/:parentId
+Request : GET http://fatihsimsek.me:9090/category/:parentId
 
-Response:
+Response :
 ```json
 {"categories":
   [
@@ -23,9 +23,9 @@ Response:
 
 ## Product List 
 
-Request: http://host:portNumber/product/:categoryId
+Request : GET http://fatihsimsek.me:9090/product/:categoryId
 
-Response:
+Response :
 ```json
 {
     "products": [
@@ -72,3 +72,69 @@ Response:
     ]
 }
 ```
+## Get Temp Desk
+
+Request : POST http://fatihsimsek.me:9090/tempdesk
+
+Example Body : 
+```json
+{
+  "deskid" : 1 
+}
+```
+
+Result : 
+```json
+{
+  "tempId": 14
+}
+```
+
+## Add Order
+
+Request : POST http://fatihsimsek.me:9090/order
+
+Example Body : 
+```json
+{
+	"tempId" : 1,
+	"products" :
+	[
+		{
+			"productId" : 1,
+			"piece" : 5
+		},
+		{
+			"productId" : 1,
+			"piece": 10
+		}
+	]
+}
+```
+
+Result : 
+```json
+{
+  "result": true
+}
+```
+
+## Change Order Status
+
+Request : POST http://fatihsimsek.me:9090/changestatus
+
+Example Body : 
+```json
+{
+  "orderId" : 14,
+  "status" : 2
+}
+```
+
+Result :
+```json
+{
+  "result" : true
+}
+```
+
