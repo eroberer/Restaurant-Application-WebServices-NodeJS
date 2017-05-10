@@ -1,18 +1,14 @@
-const config = require('./config/connection');
-const connection = config.connection;
+const database = require('./config/connection');
 
-async function getCategories (parentId) {
-    let {categories} = await categoryQuery(parentId);
-    return categories;
-}
-
-function categoryQuery(parentId) {
-    return new Promise((resolve, reject) => {
-        connection.query('SELECT categoryId, name, CONCAT(?,image) as image FROM categories WHERE parentID = ? ORDER BY sort ASC', [config.imageHost + "Categories/", parentId], (error, categories, fields) => {
-            if (error) return reject(error)
-            resolve({ categories, fields })
-        })
-    })
+async function getCategories(parentId) {
+    let categories = await database.query({
+        sql : 'SELECT categoryId, name, CONCAT(?,image) as image FROM categories WHERE parentID = ? ORDER BY sort ASC',
+        values : [
+            database.getImageHost("Categories/"),
+            parentId
+        ]
+    });
+    return categories.result;
 }
  
 module.exports = {

@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); 
 
 app.get('/category/:parentId?', (req, res) => {
-    let parentId = (req.params.parentId == null) ? 0 : req.params.parentId;
+    let parentId = (req.params.parentId === undefined) ? 0 : req.params.parentId;
     let categories = category.getCategories(parentId);
     categories.then( (result) => {
         res.json({categories: result});
@@ -62,19 +62,24 @@ app.post('/order', (req, res) => {
     }
 });
 
+app.get('/desklist', (req, res) => {
+    let deskList = order.getDeskList();
+    deskList.then( (result) => {
+        res.json(result);
+    })
+});
+
 app.post('/changestatus', (req, res) => {
     if(req.body.orderId !== undefined && req.body.status !== undefined){
-        let result = order.changeStatus(req.body.orderId, req.body.status);
-        result.then((reslt) => {
-
-            
-            res.json({result: true});
+        let change = order.changeStatus(req.body.orderId, req.body.status);
+        change.then((result) => {
+            res.json({result: result});
         });
     }else{
-        res.json({err : 'hata'});
+        res.json({err : 'selam'});
     }
-})
+});
 
-app.listen(9090, (err) => {
+app.listen(9090, () => {
     console.log('http://localhost:9090 runnig');
 }); 

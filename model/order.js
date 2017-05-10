@@ -1,60 +1,75 @@
-const config = require('./config/connection');
-const connection = config.connection;
+const database = require('./config/connection');
 
-async function getTempDesk (deskId) {
-    let {tempId} = await addTempDesk(deskId);
-    return tempId;
-}
-
-function addTempDesk(deskId) {
-    return new Promise((resolve, reject) => {
-        connection.query('INSERT INTO tempdesks (deskID) VALUES (?)', [deskId], (error, result, fields) => {
-            if (error) return reject(error)
-            let tempId = result.insertId;
-            connection.query('UPDATE desks SET tempID = ? WHERE deskID = ?',[tempId, deskId] , (err, res, fields) => {
-                resolve({ tempId, fields });
-            });
-        });
+async function getTempDesk(deskId) {
+    let isHaveDesk = await database.query({
+        sql : 'SELECT tempID FROM desks WHERE desksID = ?',
+        values : [
+            deskId
+        ]
     });
+    if(isHaveDesk.result[0].tempID === 0 ) {
+        let tempDesk = await database.query({
+            sql : 'INSERT INTO tempdesks (deskID) VALUES (?)',
+            values : [
+                deskId
+            ]
+        });
+        await database.query({
+            sql : 'UPDATE desks SET tempID = ? WHERE desksID = ?',
+            values : [
+                tempDesk.result.insertId,
+                deskId
+            ]
+        });
+        return tempDesk.result.insertId;
+    } else {
+        return isHaveDesk.result[0].tempID;
+    }
 }
 
 async function order(tempId, products) {
-    let order = await newOrder(tempId);
-    for(let i = 0; i < products.length; i++){
-        await addBasket(order.orderId, products[i].productId, products[i].piece);
+    let order = await database.query({
+        sql : 'INSERT INTO orders (tempDeskID, status) VALUES (?,1)',
+        values : [
+            tempId
+        ]
+    });
+    for (let i = 0; i < products.length; i++) {
+        await database.query({
+            sql : 'INSERT INTO baskets (orderID, productID, piece, price) '+
+            'VALUES (?, ?, ?, (SELECT price FROM products WHERE productID = ?))',
+            values : [
+                order.result.insertId,
+                products[i].productId,
+                products[i].piece,
+                products[i].productId
+            ]
+        });
     }
     return true;
 }
 
-function newOrder(tempId) {
-    return new Promise((resolve, reject) => {
-        connection.query('INSERT INTO orders (tempDeskID, status) VALUES (?,0)',[tempId] , (err, result, fields) => {
-            let orderId = result.insertId;
-            resolve({orderId});
-        });
+async function getDeskList() {
+    let deskList = await database.query({
+        sql : 'SELECT desks.name, IFNULL((SELECT status FROM orders WHERE tempDeskID = desks.tempID ORDER BY orderID DESC LIMIT 1),0) as status FROM desks'
     });
-}
-
-function addBasket(orderId, productId, piece) {
-    return new Promise((resolve, reject) => {
-        connection.query('INSERT INTO baskets (orderID, productID, piece, price)'+ 
-        'VALUES (?, ?, ?, ?*(SELECT price FROM products WHERE productID = ?))', [orderId, productId, piece, piece, productId], 
-        (err, result, fields) => {
-            resolve({ result, fields });
-        });
-    });
+    return deskList.result;
 }
 
 async function changeStatus(orderId, status) {
-    await connection.query('UPDATE orders SET status = ? WHERE orderID = ?', [status, orderId], (err, result, fields) => {
-        if(err) return false;
-        if(result.affectedRows > 0) return true;
-        else return false;
+    let change = await database.query({
+        sql : 'UPDATE orders SET status = ? WHERE orderID = ?',
+        values : [
+            status,
+            orderId
+        ]
     });
+    return change.result.affectedRows > 0;
 }
  
 module.exports = {
     getTempDesk : getTempDesk,
     order : order,
-    changeStatus : changeStatus
+    changeStatus : changeStatus,
+    getDeskList : getDeskList
 };

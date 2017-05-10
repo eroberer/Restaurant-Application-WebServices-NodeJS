@@ -1,23 +1,17 @@
-const config = require('./config/connection');
-const connection = config.connection;
+const database = require('./config/connection');
 let md5 = require('md5');
 
-async function login (username, password) {
-    let {login} = await getAccount(username, password);
-    return login;
-}
-
-function getAccount(username, password) {
-    return new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, md5(password)], (error, accounts, fields) => {
-            if (error) return reject(error)
-            let login = false;
-            if(accounts.length > 0) login = true;
-            resolve({ login, fields });
-        })
-    })
+async function login(username, password) {
+    let login = await database.query({
+        sql : 'SELECT * FROM users WHERE username = ? AND password = ?',
+        values : [
+            username,
+            md5(password)
+        ]
+    });
+    return login.result.length > 0 ;
 }
 
 module.exports = {
     login : login
-}
+};
