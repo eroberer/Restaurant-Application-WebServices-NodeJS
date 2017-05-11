@@ -65,7 +65,7 @@ app.post('/order', (req, res) => {
 app.get('/desklist', (req, res) => {
     let deskList = order.getDeskList();
     deskList.then( (result) => {
-        res.json(result);
+        res.json({desklist : result});
     })
 });
 
