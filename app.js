@@ -80,6 +80,17 @@ app.post('/changestatus', (req, res) => {
     }
 });
 
+app.get('/baskets/:orderId', (req, res) => {
+    if(req.params.orderId !== undefined && !isNaN(req.params.orderId)) {
+        let baskets = order.getBaskets(req.params.orderId);
+        baskets.then( (result) => {
+            res.json({baskets : result});
+        });
+    } else {
+        res.json({err : 'selam'});
+    }
+});
+
 app.listen(9090, () => {
     console.log('http://localhost:9090 runnig');
 }); 

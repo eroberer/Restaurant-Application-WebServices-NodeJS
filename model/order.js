@@ -56,6 +56,18 @@ async function getDeskList() {
     return deskList.result;
 }
 
+async function getBaskets(orderId) {
+    let baskets = await database.query({
+        sql : 'SELECT p.name, (SELECT CONCAT(?,image) FROM productimages WHERE productID = p.productID LIMIT 1) as image, b.piece, (b.piece*b.price) as total FROM baskets as b '+
+        'INNER JOIN products as p ON b.productID = p.productID WHERE b.orderID = ?',
+        values : [
+            database.getImageHost("Products/"),
+            orderId
+        ]
+    });
+    return baskets.result;
+}
+
 async function changeStatus(orderId, status) {
     let change = await database.query({
         sql : 'UPDATE orders SET status = ? WHERE orderID = ?',
@@ -71,5 +83,6 @@ module.exports = {
     getTempDesk : getTempDesk,
     order : order,
     changeStatus : changeStatus,
-    getDeskList : getDeskList
+    getDeskList : getDeskList,
+    getBaskets : getBaskets
 };
