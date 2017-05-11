@@ -1,23 +1,25 @@
 const mysql = require('mysql');
+const pool = mysql.createPool({
+    connectionLimit: 25,
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    database : 'restoran'
+});
 
 function getImageHost(dir = "") {
     return `http://fatihsimsek.me/restoran/Public/Uploads/${dir}`;
 }
 
-function getConnection() {
-    return mysql.createConnection({
-        host     : 'localhost',
-        user     : 'root',
-        password : '',
-        database : 'restoran'
-    });
-}
-
 function query({ sql = '', values = [] }) {
     return new Promise((resolve, reject) => {
-        getConnection().query(sql, values, (err, result) => {
-            if (err) return reject(err);
-            resolve({ result });
+        pool.getConnection((err, connection) => {
+            if (err) throw err;
+            connection.query(sql, values, (err2, result) => {
+                if (err2) return reject(err2);
+                resolve({result});
+                connection.release();
+            });
         });
     });
 }
