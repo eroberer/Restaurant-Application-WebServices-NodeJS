@@ -125,16 +125,16 @@ Request : GET http://fatihsimsek.me:9090/desklist
 Result :
 ```json
 {
-	desklist: [
+	"desklist" : [
 			{
-				name: "1",
-				status: 1,
-				orderId: 120
+				"name" : "1",
+				"status" : 1,
+				"orderId" : 120
 			},
 			{
-				name: "2",
-				status: 0,
-				orderId: 0
+				"name" : "2",
+				"status" : 0,
+				"orderId" : 0
 			}
 		]
 }
