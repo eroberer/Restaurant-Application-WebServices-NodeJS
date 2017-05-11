@@ -51,7 +51,7 @@ async function order(tempId, products) {
 
 async function getDeskList() {
     let deskList = await database.query({
-        sql : 'SELECT desks.name, IFNULL((SELECT status FROM orders WHERE tempDeskID = desks.tempID ORDER BY orderID DESC LIMIT 1),0) as status, IFNULL((SELECT orderID FROM orders WHERE tempDeskID = desks.tempID ORDER BY orderID DESC LIMIT 1),0) as status, FROM desks'
+        sql : 'SELECT desks.name, IFNULL((SELECT status FROM orders WHERE tempDeskID = desks.tempID ORDER BY orderID DESC LIMIT 1),0) as status, IFNULL((SELECT orderID FROM orders WHERE tempDeskID = desks.tempID ORDER BY orderID DESC LIMIT 1),0) as orderId FROM desks'
     });
     return deskList.result;
 }
