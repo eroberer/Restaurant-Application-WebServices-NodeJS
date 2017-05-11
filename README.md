@@ -118,7 +118,27 @@ Result :
   "result": true
 }
 ```
+## Get Desk List
 
+Request : GET http://fatihsimsek.me:9090/desklist
+
+Result :
+```json
+{
+	desklist: [
+			{
+				name: "1",
+				status: 1,
+				orderId: 120
+			},
+			{
+				name: "2",
+				status: 0,
+				orderId: 0
+			}
+		]
+}
+```
 ## Change Order Status
 
 Request : POST http://fatihsimsek.me:9090/changestatus
