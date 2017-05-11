@@ -158,3 +158,25 @@ Result :
 }
 ```
 
+## Get Order Baskets
+
+Request : GET http://fatihsimsek.me:9090/baskets/:orderId
+
+Result :
+```json
+{
+	"baskets": [
+		{
+			"name": "Tavuk Sote",
+			"image": "http://fatihsimsek.me/restoran/Public/Uploads/Products/http://cdn.yemek.com/mnresize/940/627/uploads/2016/04/sebzeli-tavuk-sote.jpg",
+			"piece": 5,
+			"total": 62.5
+		},
+		{
+			"name": "Tavuk Sote",
+			"image": "http://fatihsimsek.me/restoran/Public/Uploads/Products/http://cdn.yemek.com/mnresize/940/627/uploads/2016/04/sebzeli-tavuk-sote.jpg",
+			"piece": 10,
+			"total": 125
+		}
+	]
+}
