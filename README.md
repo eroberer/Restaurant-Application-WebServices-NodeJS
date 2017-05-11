@@ -118,7 +118,27 @@ Result :
   "result": true
 }
 ```
+## Get Desk List
 
+Request : GET http://fatihsimsek.me:9090/desklist
+
+Result :
+```json
+{
+	"desklist" : [
+			{
+				"name" : "1",
+				"status" : 1,
+				"orderId" : 120
+			},
+			{
+				"name" : "2",
+				"status" : 0,
+				"orderId" : 0
+			}
+		]
+}
+```
 ## Change Order Status
 
 Request : POST http://fatihsimsek.me:9090/changestatus
@@ -138,3 +158,25 @@ Result :
 }
 ```
 
+## Get Order Baskets
+
+Request : GET http://fatihsimsek.me:9090/baskets/:orderId
+
+Result :
+```json
+{
+	"baskets": [
+		{
+			"name": "Tavuk Sote",
+			"image": "http://fatihsimsek.me/restoran/Public/Uploads/Products/http://cdn.yemek.com/mnresize/940/627/uploads/2016/04/sebzeli-tavuk-sote.jpg",
+			"piece": 5,
+			"total": 62.5
+		},
+		{
+			"name": "Tavuk Sote",
+			"image": "http://fatihsimsek.me/restoran/Public/Uploads/Products/http://cdn.yemek.com/mnresize/940/627/uploads/2016/04/sebzeli-tavuk-sote.jpg",
+			"piece": 10,
+			"total": 125
+		}
+	]
+}
