@@ -91,6 +91,17 @@ app.get('/baskets/:orderId', (req, res) => {
     }
 });
 
+app.get('/detail/:productId', (req, res) => {
+   if(req.params.productId !== undefined) {
+       let detail = product.detail(req.params.productId);
+       detail.then( (result) => {
+           res.json({detail : result});
+       });
+   } else {
+       res.json({err : 'selam'});
+   }
+});
+
 app.listen(9090, () => {
     console.log('http://localhost:9090 runnig');
 }); 

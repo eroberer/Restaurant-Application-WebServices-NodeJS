@@ -24,6 +24,24 @@ async function getProducts(categoryId) {
     return results;
 }
 
+
+async function detail(productId) {
+    let product = await database.query({
+        sql : 'SELECT * FROM products WHERE productID = ?',
+        values : [productId]
+    });
+
+    if (product.result[0].productID !== undefined) {
+        let images = await database.query({
+            sql : 'SELECT image FROM productimages WHERE productID = ?',
+            values : [productId]
+        });
+        product.result[0].images = images.result;
+        return product.result;
+    }
+}
+
 module.exports = {
-    getProducts : getProducts
+    getProducts : getProducts,
+    detail : detail
 };
