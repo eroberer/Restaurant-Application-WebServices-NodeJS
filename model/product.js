@@ -28,12 +28,15 @@ async function getProducts(categoryId) {
 async function detail(productId) {
     let product = await database.query({
         sql : 'SELECT * FROM products WHERE productID = ?',
-        values : [productId]
+        values : [
+            database.getImageHost("Products/"),
+            productId
+        ]
     });
 
     if (product.result[0] !== undefined) {
         let images = await database.query({
-            sql : 'SELECT image FROM productimages WHERE productID = ?',
+            sql : 'SELECT CONCAT(?,image) FROM productimages WHERE productID = ?',
             values : [productId]
         });
         product.result[0].images = images.result;
