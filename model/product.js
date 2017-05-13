@@ -33,7 +33,7 @@ async function detail(productId) {
 
     if (product.result[0] !== undefined) {
         let images = await database.query({
-            sql : 'SELECT CONCAT(?,image) FROM productimages WHERE productID = ?',
+            sql : 'SELECT CONCAT(?,image) as image FROM productimages WHERE productID = ?',
             values : [
                 database.getImageHost("Products/"),
                 productId
