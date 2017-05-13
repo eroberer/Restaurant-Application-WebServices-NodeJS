@@ -31,12 +31,14 @@ async function detail(productId) {
         values : [productId]
     });
 
-    if (product.result[0].productID !== undefined) {
+    if (product.result[0] !== undefined) {
         let images = await database.query({
             sql : 'SELECT image FROM productimages WHERE productID = ?',
             values : [productId]
         });
         product.result[0].images = images.result;
+        return product.result;
+    } else {
         return product.result;
     }
 }
