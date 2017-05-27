@@ -51,9 +51,17 @@ async function order(tempId, products) {
 
 async function getDeskList() {
     let deskList = await database.query({
-        sql : 'SELECT desks.name, IFNULL((SELECT status FROM orders WHERE tempDeskID = desks.tempID ORDER BY orderID DESC LIMIT 1),0) as status, IFNULL((SELECT orderID FROM orders WHERE tempDeskID = desks.tempID ORDER BY orderID DESC LIMIT 1),0) as orderId FROM desks WHERE deleteAt = 0'
+        sql : 'SELECT desks.name, IFNULL((SELECT status FROM orders WHERE tempDeskID = desks.tempID ORDER BY orderID DESC LIMIT 1),0) as status, IFNULL((SELECT desks.tempID FROM orders WHERE tempDeskID = desks.tempID ORDER BY orderID DESC LIMIT 1),0) as tempId FROM desks WHERE deleteAt = 0'
     });
     return deskList.result;
+}
+
+async function getDeskOrders(tempId) {
+    let orderList = await database.query({
+        sql: 'SELECT ord.orderID, TIME(ord.date) as date, ord.status, (SELECT SUM(price*piece) FROM baskets WHERE orderID = ord.orderID) as total FROM orders as ord WHERE ord.tempDeskID = ? ORDER BY ord.orderID DESC',
+        values : [tempId]
+    });
+    return orderList.result;
 }
 
 async function getBaskets(orderId) {
@@ -68,6 +76,27 @@ async function getBaskets(orderId) {
     return baskets.result;
 }
 
+async function editBasket(baskets) {
+    for (let i = 0; i < baskets.length; i++) {
+        await database.query({
+            sql : 'UPDATE baskets SET piece = ? WHERE basketID = ? ',
+            values : [
+                baskets[i].piece,
+                baskets[i].basketId
+            ]
+        });
+    }
+    return true;
+}
+
+async function deleteBasket(basketId) {
+    await database.query({
+            sql : 'DELETE FROM baskets WHERE basketID = ? ',
+            values : [ basketId ]
+        });
+    return true;
+}
+
 async function changeStatus(orderId, status) {
     let change = await database.query({
         sql : 'UPDATE orders SET status = ? WHERE orderID = ?',
@@ -80,9 +109,12 @@ async function changeStatus(orderId, status) {
 }
  
 module.exports = {
-    getTempDesk : getTempDesk,
-    order : order,
-    changeStatus : changeStatus,
-    getDeskList : getDeskList,
-    getBaskets : getBaskets
+    getTempDesk     : getTempDesk,
+    order           : order,
+    changeStatus    : changeStatus,
+    getDeskList     : getDeskList,
+    getBaskets      : getBaskets,
+    getDeskOrders   : getDeskOrders,
+    editBasket      : editBasket,
+    deleteBasket    : deleteBasket
 };

@@ -129,16 +129,42 @@ Result :
 			{
 				"name" : "1",
 				"status" : 1,
-				"orderId" : 120
+				"tempId" : 120
 			},
 			{
 				"name" : "2",
 				"status" : 0,
-				"orderId" : 0
+				"tempId" : 0
 			}
 		]
 }
 ```
+
+## Get Order List
+
+Request : GET http://fatihsimsek.me:9090/deskOrders/:tempId
+
+Result :
+```json
+{
+  "deskOrders": [
+    {
+      "orderID": 22,
+      "date": "16:23:43",
+      "status": 3,
+      "total": 100
+    },
+    {
+      "orderID": 21,
+      "date": "16:23:43",
+      "status": 2,
+      "total": 625
+    }
+  ]
+}
+```
+
+
 ## Change Order Status
 
 Request : POST http://fatihsimsek.me:9090/changestatus
@@ -180,3 +206,54 @@ Result :
 		}
 	]
 }
+```
+
+
+
+## Edit Baskets
+
+Request : POST http://fatihsimsek.me:9090/editbasket
+
+Example Body : 
+```json
+{
+	"baskets" : 
+	[ 
+		{
+			"basketId" : 1,
+			"piece" : 3
+		},
+		{
+			"basketId" : 2,
+			"piece" : 5
+		}
+	]
+}
+```
+
+Result :
+```json
+{
+  "result" : true
+}
+```
+
+
+## Delete Baskets
+
+Request : POST http://fatihsimsek.me:9090/deletebasket
+
+Example Body : 
+```json
+{
+	"basketId" : 4
+}
+```
+
+Result :
+```json
+{
+  "result" : true
+}
+```
+

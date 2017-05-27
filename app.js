@@ -69,6 +69,25 @@ app.get('/desklist', (req, res) => {
     })
 });
 
+app.get('/deskOrders/:tempId', (req, res) => {
+    let deskOrders = order.getDeskOrders(req.params.tempId);
+    deskOrders.then( (result) => {
+        res.json({deskOrders : result});
+    })
+});
+
+app.post('/editbasket', (req, res) => {
+    order.editBasket(req.body.baskets).then( (result) => {
+        res.json({result : result});
+    })
+});
+
+app.post('/deletebasket', (req, res) => {
+    order.deleteBasket(req.body.basketId).then( (result) => {
+        res.json({result : result});
+    })
+});
+
 app.post('/changestatus', (req, res) => {
     if(req.body.orderId !== undefined && req.body.status !== undefined){
         let change = order.changeStatus(req.body.orderId, req.body.status);
