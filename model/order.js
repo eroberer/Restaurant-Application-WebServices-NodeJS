@@ -58,7 +58,7 @@ async function getDeskList() {
 
 async function getDeskOrders(tempId) {
     let orderList = await database.query({
-        sql: 'SELECT ord.orderID, TIME(ord.date) as date, ord.status, (SELECT SUM(price*piece) FROM baskets WHERE orderID = ord.orderID) as total FROM orders as ord WHERE ord.tempDeskID = ? ORDER BY ord.orderID DESC',
+        sql: 'SELECT ord.orderID, TIME(ord.date) as date, ord.status, (SELECT SUM(price*piece) FROM baskets WHERE orderID = ord.orderID) as total FROM orders as ord WHERE ord.tempDeskID = ? AND (SELECT COUNT(*) FROM baskets WHERE orderID = ord.orderID ) > 0 ORDER BY ord.orderID DESC',
         values : [tempId]
     });
     return orderList.result;
