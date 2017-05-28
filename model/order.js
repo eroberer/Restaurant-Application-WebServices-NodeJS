@@ -90,11 +90,11 @@ async function editBasket(baskets) {
 }
 
 async function deleteBasket(basketId) {
-    await database.query({
+    let change = await database.query({
             sql : 'DELETE FROM baskets WHERE basketID = ? ',
             values : [ basketId ]
         });
-    return true;
+    return change.result.affectedRows > 0;
 }
 
 async function changeStatus(orderId, status) {
