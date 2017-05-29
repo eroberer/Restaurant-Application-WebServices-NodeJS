@@ -66,7 +66,7 @@ async function getDeskOrders(tempId) {
 
 async function getBaskets(orderId) {
     let baskets = await database.query({
-        sql : 'SELECT b.basketID, p.name, (SELECT CONCAT(?,image) FROM productimages WHERE productID = p.productID LIMIT 1) as image, b.piece, (b.piece*b.price) as total FROM baskets as b '+
+        sql : 'SELECT b.basketID, p.name, (SELECT CONCAT(?,image) FROM productimages WHERE productID = p.productID LIMIT 1) as image, b.piece, b.price as total FROM baskets as b '+
         'INNER JOIN products as p ON b.productID = p.productID WHERE b.orderID = ?',
         values : [
             database.getImageHost("Products/"),
