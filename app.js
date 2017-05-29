@@ -77,9 +77,18 @@ app.get('/deskOrders/:tempId', (req, res) => {
 });
 
 app.post('/editbasket', (req, res) => {
-    order.editBasket(req.body.baskets).then( (result) => {
-        res.json({result : result});
-    })
+    if(req.body.baskets !== undefined){
+        if (req.body.baskets.length > 0){
+            order.editBasket(req.body.baskets).then( (result) => {
+                res.json({result : result});
+            });
+        } else {
+            res.json({result : 'baskets array length is zero'});
+        }
+    } else {
+        res.json({result : 'undefined baskets parameters!'});
+    }
+
 });
 
 app.post('/deletebasket', (req, res) => {
