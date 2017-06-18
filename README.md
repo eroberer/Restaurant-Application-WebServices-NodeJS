@@ -1,4 +1,4 @@
-# Restoraunt-Application-WebServices
+# Restaurant-Application-WebServices
 
 ## Category List
 If parentId is null, default is zero
